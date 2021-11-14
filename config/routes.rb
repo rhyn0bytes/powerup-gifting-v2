@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get 'tests', to: 'tests#index'
+      resources :wishes
+      get '/all/wishes', to: 'wishes#all_wishes'
     end
   end
   get '/api/current_user', to: 'current_user#index'
