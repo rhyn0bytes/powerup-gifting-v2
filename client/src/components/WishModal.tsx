@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Button, Card, Form } from "react-bootstrap";
+import { Button, Modal, Form, ModalBody } from "react-bootstrap";
 import { wishesApi } from "state/wishes";
 import { IWishDTO } from "models/wish";
 
-function NewWish() {
+function WishModal() {
   const [updateWish, { isLoading }] = wishesApi.useCreateWishMutation();
   const [wish, setWish] = useState<IWishDTO>({
     name: "",
@@ -25,12 +25,13 @@ function NewWish() {
   };
 
   return (
-    <Card>
-      <Card.Body>
-        <Card.Title className="text-center mb-5 fw-light fs-5">
+    <Modal fullscreen={"md-down"}>
+      <Modal.Header closeButton>
+        <Modal.Title>
           New Wish
-        </Card.Title>
-
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
         <Form onSubmit={_handleSubmit}>
           <Form.Group className="form-floating mb-3" controlId="name">
             <Form.Control
@@ -52,6 +53,26 @@ function NewWish() {
             <Form.Label>Description</Form.Label>
           </Form.Group>
 
+          <Form.Group className="form-floating mb-3" controlId="url">
+            <Form.Control
+              type="url"
+              placeholder="URL"
+              value={wish.url}
+              onChange={_handleChange}
+            />
+            <Form.Label>URL</Form.Label>
+          </Form.Group>
+
+          <Form.Group className="form-floating mb-3" controlId="price">
+            <Form.Control
+              type="number"
+              placeholder="Price"
+              value={wish.price}
+              onChange={_handleChange}
+            />
+            <Form.Label>Price</Form.Label>
+          </Form.Group>
+
           <div className="d-grid">
             <Button
               variant="primary"
@@ -69,9 +90,9 @@ function NewWish() {
             </Alert>
           ) : null} */}
         </Form>
-      </Card.Body>
-    </Card>
+      </Modal.Body>
+    </Modal>
   );
 }
 
-export default NewWish;
+export default WishModal;
