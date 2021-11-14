@@ -11,7 +11,10 @@
     "test": "echo \"Error: no test specificed\" && exit 1",
     "start": "cd client && yarn start",
     "build": "cd client && yarn build",
-    "install": "cd client && yarn"
+    "install": "cd client && yarn",
+    "heroku-build": "yarn --cwd client install && yarn --cwd client build",
+    "deploy": "cp -a client/build/. public/",
+    "heroku-postbuild": "yarn heroku-build && yarn deploy"
   },
   "keywords": [],
   "author": "",
