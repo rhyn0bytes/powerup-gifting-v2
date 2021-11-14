@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Card, Col, Container, Form, Row, Alert } from 'react-bootstrap';
+import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { IRegistration } from "../models/user";
 import { signup, selectErrors, selectAuthLoading } from "../state/auth";
+import useAuthentication from "../hooks/useAuthentication";
+
 // import { library } from '@fortawesome/fontawesome-svg-core';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -11,6 +14,13 @@ import { signup, selectErrors, selectAuthLoading } from "../state/auth";
 
 function Signup() {
   const dispatch = useDispatch();
+  const { push } = useHistory();
+
+  const { authenticated } = useAuthentication();
+
+  useEffect(() => {
+    if (authenticated) push("/wishes");
+  }, [authenticated, push]);
 
   const signupErrors = useSelector(selectErrors);
   const loading = useSelector(selectAuthLoading);
@@ -35,7 +45,7 @@ function Signup() {
   }
   
   const _handleSignup = async () => {
-    dispatch(signup({user}));
+    dispatch(signup({ user }));
   }
 
   return (

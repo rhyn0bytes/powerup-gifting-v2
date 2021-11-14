@@ -34,8 +34,15 @@ export const signup = createAsyncThunk<
   { user: IRegistration },
   { rejectValue: string | unknown }
 >("signup", async ({ user }, { rejectWithValue }) => {
+  let preResponseErrors: Array<string> = [];
   if (user.password !== user.password_confirmation) {
-    return rejectWithValue("Password does not match Password Confirmation.")
+    preResponseErrors.push("Password does not match Password Confirmation.")
+  }
+  if (user.password.length < 6) {
+    preResponseErrors.push("Password must be 6 or more characters.")
+  }
+  if (preResponseErrors.length > 0) {
+    return rejectWithValue(preResponseErrors.join(" "))
   }
   try {
     const req = await auth.register(user);
