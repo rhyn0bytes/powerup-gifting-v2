@@ -34,7 +34,7 @@ export const signup = createAsyncThunk<
   { user: IRegistration },
   { rejectValue: string | unknown }
 >("signup", async ({ user }, { rejectWithValue }) => {
-  if (user.password != user.password_confirmation) {
+  if (user.password !== user.password_confirmation) {
     return rejectWithValue("Password does not match Password Confirmation.")
   }
   try {

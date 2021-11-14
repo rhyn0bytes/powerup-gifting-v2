@@ -12,7 +12,8 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { IAuthentication } from "../models/user";
 import { login, selectErrors, selectAuthLoading } from "../state/auth";
-import { useAuthentication } from "../components/Navigation";
+import useAuthentication from "../hooks/useAuthentication";
+
 // import { library } from '@fortawesome/fontawesome-svg-core';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -27,7 +28,7 @@ function Login() {
 
   useEffect(() => {
     if (authenticated) push("/wishes");
-  }, [authenticated]);
+  }, [authenticated, push]);
 
   const loginErrors = useSelector(selectErrors);
   const loading = useSelector(selectAuthLoading);

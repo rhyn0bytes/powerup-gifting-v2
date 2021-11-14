@@ -1,5 +1,5 @@
 import { Route, Redirect } from "react-router-dom";
-import { useAuthentication } from "./Navigation";
+import useAuthentication from "../hooks/useAuthentication";
 
 type PrivateRouteProps = {
   component: () => JSX.Element;
