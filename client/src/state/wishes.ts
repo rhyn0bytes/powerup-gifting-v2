@@ -1,14 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "./store";
+import { IWish, IWishDTO } from "models/wish";
 
-interface Wish {
-  id: number;
-  name: string;
-  description: string;
-  url: string;
-  price: string;
-}
-type WishesResponse = Wish[];
+type WishesResponse = IWish[];
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "/api/v1/",
@@ -39,7 +33,7 @@ export const wishesApi = createApi({
             ]
           : [{ type: "Wish", id: "LIST" }],
     }),
-    addWish: build.mutation<Wish, Partial<Wish>>({
+    createWish: build.mutation<IWishDTO, Partial<IWish>>({
       query: (body) => ({
         url: `posts`,
         method: "POST",
