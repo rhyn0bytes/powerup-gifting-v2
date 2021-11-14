@@ -4,7 +4,7 @@ Rails.application.routes.draw do
       get 'tests', to: 'tests#index'
     end
   end
-  get '/current_user', to: 'current_user#index'
+  get '/api/current_user', to: 'current_user#index'
   devise_for :users, path: 'api', path_names: {
     sign_in: 'login',
     sign_out: 'logout',
