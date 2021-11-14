@@ -1,0 +1,19 @@
+{
+  "name": "gifting-v2",
+  "version": "1.0.0",
+  "description": "This is the root package.json file for the full app.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specificed\" && exit 1",
+    "start": "cd client && yarn start",
+    "build": "cd client && yarn build",
+    "install": "cd client && yarn"
+  },
+  "keywords": [],
+  "author": "",
+  "license": ""
+}
