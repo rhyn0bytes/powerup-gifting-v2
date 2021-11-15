@@ -1,14 +1,15 @@
 import {useDispatch, useSelector} from 'react-redux';
-import { useHistory} from 'react-router-dom';
-import { logout, selectToken } from '../state/auth';
+import { useHistory } from 'react-router-dom';
+import { logout, selectToken, selectUser } from '../state/auth';
 
 export default function useAuthentication() {
     const dispatch = useDispatch();
     const token = useSelector(selectToken);
+    const user = useSelector(selectUser);
   
     const { push } = useHistory();
   
-    const authenticated = token;
+    const authenticated = (token && user);
   
     const _logout = async (e: any) => {
       e.preventDefault();

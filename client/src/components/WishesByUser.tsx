@@ -23,6 +23,11 @@ function WishesByUser(): JSX.Element {
             <Row key={user.id}>
               <h2>{user.email}</h2>
               <Table striped bordered hover responsive="md">
+                <colgroup>
+                  <col style={{width: '25%'}} />
+                  <col style={{width: '50%'}} />
+                  <col style={{width: '25%'}} />
+                </colgroup>
                 <thead>
                   <th>Wish</th>
                   <th>Description</th>
