@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { Button, Modal, Form, ModalBody } from "react-bootstrap";
-import { wishesApi } from "state/wishes";
-import { IWishDTO } from "models/wish";
+import { useEffect, useState } from "react";
+import { Button, Modal, Form, ModalProps } from "react-bootstrap";
+import { useGetWishQuery, useUpdateWishMutation } from "state/wishes";
+import { IWish } from "models/wish";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
-function WishModal() {
-  const [updateWish, { isLoading }] = wishesApi.useCreateWishMutation();
-  const [wish, setWish] = useState<IWishDTO>({
-    name: "",
-    url: "",
-    description: "",
-    price: "",
-  });
+type WishModalProps = ModalProps & { wishId?: number };
+
+function EditWishModal({ show, onHide, wishId }: WishModalProps): JSX.Element {
+  const { data: wishFromId } = useGetWishQuery(wishId ?? skipToken);
+  const [updateWish, { isLoading }] = useUpdateWishMutation();
+
+  const [wish, setWish] = useState<Partial<IWish>>();
 
   const _handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const { id, value } = e.target;
@@ -19,17 +19,44 @@ function WishModal() {
       [id]: value,
     }));
   };
-  const _handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+
+  const _handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    updateWish(wish);
+    if (wish && wish.id) {
+      const newWish = await updateWish(wish).unwrap();
+      if (newWish) {
+        onHide();
+      }
+    }
   };
 
+  useEffect(() => {
+    if (wishFromId) {
+      setWish(wishFromId);
+    }
+  }, [wishFromId]);
+
+  const _handleOnModalExit = () => {
+    setWish({
+      name: "",
+      url: "",
+      description: "",
+      price: "",
+    });
+  };
+
+  const _modalTitle = "Edit Wish";
+  const _buttonText = "Update Wish";
+
   return (
-    <Modal fullscreen={"md-down"}>
+    <Modal
+      show={show}
+      onHide={onHide}
+      onExited={_handleOnModalExit}
+      fullscreen={"md-down"}
+    >
       <Modal.Header closeButton>
-        <Modal.Title>
-          New Wish
-        </Modal.Title>
+        <Modal.Title>{_modalTitle}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={_handleSubmit}>
@@ -37,7 +64,7 @@ function WishModal() {
             <Form.Control
               type="text"
               placeholder="Wish name"
-              value={wish.name}
+              value={wish?.name}
               onChange={_handleChange}
             />
             <Form.Label>Name</Form.Label>
@@ -47,7 +74,7 @@ function WishModal() {
             <Form.Control
               as="textarea"
               placeholder="Wish dscription"
-              value={wish.description}
+              value={wish?.description}
               onChange={_handleChange}
             />
             <Form.Label>Description</Form.Label>
@@ -57,7 +84,7 @@ function WishModal() {
             <Form.Control
               type="url"
               placeholder="URL"
-              value={wish.url}
+              value={wish?.url}
               onChange={_handleChange}
             />
             <Form.Label>URL</Form.Label>
@@ -66,8 +93,9 @@ function WishModal() {
           <Form.Group className="form-floating mb-3" controlId="price">
             <Form.Control
               type="number"
+              step={0.01}
               placeholder="Price"
-              value={wish.price}
+              value={wish?.price}
               onChange={_handleChange}
             />
             <Form.Label>Price</Form.Label>
@@ -80,7 +108,7 @@ function WishModal() {
               type="submit"
               className="btn-login text-uppercase fw-bold mb-3"
             >
-              Create Wish
+              {_buttonText}
             </Button>
           </div>
 
@@ -95,4 +123,4 @@ function WishModal() {
   );
 }
 
-export default WishModal;
+export default EditWishModal;

@@ -11,8 +11,20 @@ class Api::V1::WishesController < ApplicationController
   end
 
   def all_wishes
-    wishes = User.all
-    render json: UserWishesSerializer.new(wishes).serializable_hash[:data], status: :ok
+    users = User.all
+    collection = []
+    users.each do |user|
+      wishes = []
+      user.wishes.each do |wish|
+        wishes.push(WishSerializer.new(wish).serializable_hash[:data][:attributes])
+      end
+      fullObj = {
+        user: UserSerializer.new(user).serializable_hash[:data][:attributes],
+        wishes: wishes
+      }
+      collection.push(fullObj)
+    end
+    render json: collection, status: :ok
   end
 
   def show
@@ -27,7 +39,7 @@ class Api::V1::WishesController < ApplicationController
 
   def update
     wish = Wish.find(params[:id])
-    wish.update_attributes(wish_params)
+    wish.update(wish_params)
     render json: WishSerializer.new(wish).serializable_hash[:data][:attributes], status: :ok
   end
 
@@ -38,6 +50,6 @@ class Api::V1::WishesController < ApplicationController
   private
 
   def wish_params
-    params.require(:wish).permit(:name, :description, :url, :price)
+    params.require(:wish).permit(:id, :name, :description, :url, :price)
   end
 end

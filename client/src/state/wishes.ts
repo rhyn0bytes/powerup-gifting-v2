@@ -1,7 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "./store";
 import { IWish, IWishDTO } from "models/wish";
+import { IUser } from "models/user";
 
+type AllWishesRespons = {
+  user: IUser;
+  wishes: IWish[];
+}[];
 type WishesResponse = IWish[];
 
 const baseQuery = fetchBaseQuery({
@@ -20,10 +25,10 @@ export const wishesApi = createApi({
   reducerPath: "wishesApi",
   baseQuery,
   refetchOnMountOrArgChange: true,
-  tagTypes: ["Wish"],
+  tagTypes: ["Wish", "AllWishes"],
   endpoints: (build) => ({
     getWishes: build.query<WishesResponse, void>({
-      query: (name) => `wishes`,
+      query: () => `wishes`,
 
       providesTags: (result) =>
         result
@@ -33,15 +38,35 @@ export const wishesApi = createApi({
             ]
           : [{ type: "Wish", id: "LIST" }],
     }),
+    getWish: build.query<IWish, number>({
+      query: (wishId) => `wishes/${wishId}`,
+    }),
+    updateWish: build.mutation<IWish, Partial<IWish>>({
+      query: ({ id, ...wish }) => ({
+        url: `wishes/${id}`,
+        method: "PUT",
+        body: wish,
+      }),
+      invalidatesTags: ["Wish"],
+    }),
     createWish: build.mutation<IWishDTO, Partial<IWish>>({
       query: (body) => ({
-        url: `posts`,
+        url: `wishes`,
         method: "POST",
         body,
       }),
       invalidatesTags: [{ type: "Wish", id: "LIST" }],
     }),
+    getAllWishes: build.query<AllWishesRespons, void>({
+      query: () => `all/wishes`,
+    }),
   }),
 });
 
-export const getWishes = wishesApi.endpoints.getWishes.useQuery;
+export const {
+  useGetAllWishesQuery,
+  useCreateWishMutation,
+  useGetWishQuery,
+  useGetWishesQuery,
+  useUpdateWishMutation,
+} = wishesApi;

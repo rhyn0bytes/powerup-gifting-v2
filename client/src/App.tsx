@@ -1,23 +1,13 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Navigation from "./components/Navigation";
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Home, Wishes, NotFound, Login, Signup } from "./pages";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
 import PrivateRoute from "./components/PrivateRoute";
-// const fetchTestDatas = function() {
-//   fetch('api/v1/tests')
-//     .then(res => res.json())
-//     .then((response) => { console.log("Test datas response", response); })
-//     .catch((error) => { console.log("Error while fetching test datas", error); })
-// }
 
-function App() {
+function App(): JSX.Element {
   return (
     <Provider store={store}>
       <BrowserRouter>
@@ -35,7 +25,5 @@ function App() {
     </Provider>
   );
 }
-
-
 
 export default App;
