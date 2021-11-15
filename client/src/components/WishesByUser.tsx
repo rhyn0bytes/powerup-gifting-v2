@@ -1,4 +1,5 @@
 import { Row, Table } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { useGetAllWishesQuery } from "state/wishes";
 
 function WishesByUser(): JSX.Element {
@@ -14,7 +15,7 @@ function WishesByUser(): JSX.Element {
                     <tr key={wish.id}>
                       <td>{wish.name}</td>
                       <td>{wish.description}</td>
-                      <td>{wish.url}</td>
+                      <td><a href={wish.url}>{wish.url}</a></td>
                     </tr>
                   );
                 })
