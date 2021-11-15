@@ -9,7 +9,7 @@ export default function useAuthentication() {
   
     const { push } = useHistory();
   
-    const authenticated = (token && user);
+    const authenticated = token;
   
     const _logout = async (e: any) => {
       e.preventDefault();
